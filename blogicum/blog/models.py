@@ -1,9 +1,17 @@
 from django.contrib.auth.models import User
 from django.db import models
+from core.models import PublishedModel
+from .constants import (STR_REPR_MAX_LENGTH,
+                        DEFAULTRELATED_NAME_POSTS)
 
 
-class Category(models.Model):
-    """категория публикации.
+def _short(s: str) -> str:
+    limit = STR_REPR_MAX_LENGTH
+    return s if len(s) <= limit else f'{s[:limit - 1]}…'
+
+
+class Category(PublishedModel):
+    """Категория публикации.
 
     Поля:
         title: Заголовок категории.
@@ -18,30 +26,23 @@ class Category(models.Model):
     slug = models.SlugField(
         'Идентификатор',
         unique=True,
-        help_text='Идентификатор страницы для URL; разрешены символы латиницы,'
-        ' цифры, дефис и подчёркивание.'
-    )
-    is_published = models.BooleanField(
-        'Опубликовано',
-        default=True,
-        help_text='Снимите галочку, чтобы скрыть публикацию.'
-    )
-    created_at = models.DateTimeField(
-        'Добавлено',
-        auto_now_add=True
+        help_text=(
+            'Идентификатор страницы для URL; разрешены символы латиницы, '
+            'цифры, дефис и подчёркивание.'
+        )
     )
 
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
-        ordering = ['-created_at']
+        default_related_name = DEFAULTRELATED_NAME_POSTS
 
     def __str__(self):
         """Возвращает читабельное представление категории."""
-        return self.title
+        return _short(self.title)
 
 
-class Location(models.Model):
+class Location(PublishedModel):
     """Местоположение публикации.
 
     Поля:
@@ -51,26 +52,19 @@ class Location(models.Model):
     """
 
     name = models.CharField('Название места', max_length=256)
-    is_published = models.BooleanField(
-        'Опубликовано',
-        default=True
-    )
-    created_at = models.DateTimeField(
-        'Добавлено',
-        auto_now_add=True
-    )
 
     class Meta:
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
-        ordering = ['-created_at']
+        default_related_name = DEFAULTRELATED_NAME_POSTS
 
     def __str__(self):
-        return self.name
+        return _short(self.name)
 
 
-class Post(models.Model):
-    """Рубликация (пост) пользователя
+class Post(PublishedModel):
+    """Рубликация (пост) пользователя.
+
     Поля:
         title: Заголовок публикации.
         text: Текст публикации.
@@ -86,33 +80,31 @@ class Post(models.Model):
     text = models.TextField('Текст')
     pub_date = models.DateTimeField(
         'Дата и время публикации',
-        help_text='Если установить дату и время в будущем — можно делать '
-        'отложенные публикации.',
+        help_text=(
+            'Если установить дату и время в будущем — можно делать '
+            'отложенные публикации.'
+        ),
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='Автор публикации'
+        verbose_name='Автор публикации',
+        related_name=DEFAULTRELATED_NAME_POSTS,
+
     )
     location = models.ForeignKey(
         Location,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        verbose_name='Местоположение'
+        verbose_name='Местоположение',
+
     )
     category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL,
-        null=True, blank=False, verbose_name='Категория'
-    )
-    is_published = models.BooleanField(
-        'Опубликовано',
-        default=True,
-        blank=True
-    )
-    created_at = models.DateTimeField(
-        'Добавлено',
-        auto_now_add=True
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name='Категория',
     )
 
     class Meta:
@@ -120,5 +112,5 @@ class Post(models.Model):
         verbose_name_plural = 'Публикации'
         ordering = ['-pub_date']
 
-    def __str__(self):
-        return self.title
+    def __str__(self) -> str:
+        return _short(self.title)
