@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from .models import Category, Post
 from .constants import LAST_FIVE_POSTS
+from .models import Category, Post
 
 
 def get_posts_queryset():

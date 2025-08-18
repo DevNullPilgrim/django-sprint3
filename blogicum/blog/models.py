@@ -1,6 +1,7 @@
-from core.models import PublishedModel
 from django.contrib.auth.models import User
 from django.db import models
+
+from core.models import PublishedModel
 
 from .constants import DEFAULTRELATED_NAME_POSTS, STR_REPR_MAX_LENGTH
 
