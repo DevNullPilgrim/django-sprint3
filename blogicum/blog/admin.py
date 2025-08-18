@@ -73,8 +73,9 @@ class LocationAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    """Публикации: фильтры, поиск, быстрая правка публикации,
-        иерархия по дате.
+    """Админка публикаций.
+
+    Фильтры, поиск, быстрая правка; иерархия по дате.
     """
 
     list_display = (
