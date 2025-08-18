@@ -73,7 +73,9 @@ class LocationAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    """Публикации: фильтры, поиск, быстрая правка публикации, иерархия по дате."""
+    """Публикации: фильтры, поиск, быстрая правка публикации,
+        иерархия по дате.
+    """
 
     list_display = (
         "id", "title", "author", "category", "location",
@@ -95,7 +97,12 @@ class PostAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Основное", {"fields": ("title", "text")}),
         ("Связи и публикация", {
-            "fields": ("author", "category", "location", "is_published", "pub_date"),
+            "fields": (
+                "author",
+                "category",
+                "location",
+                "is_published",
+                "pub_date"),
         }),
         ("Служебные", {"fields": ("created_at",)}),
     )
