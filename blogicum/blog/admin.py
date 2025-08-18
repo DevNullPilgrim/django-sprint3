@@ -1,29 +1,18 @@
-from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth.models import Group
 
+from .forms import GroupForm
 from .models import Category, Location, Post
+from .constants import ADMIN_LIST_PER_PAGE
+
+admin.site.unregister(Group)
 
 
-class GroupForm(forms.ModelForm):
-    """Форма для Group: заменяем двойной select на обычный мультиселект."""
-
-    class Meta:
-        model = Group
-        fields = "__all__"
-        widgets = {
-            "permissions": forms.SelectMultiple(),
-        }
-
-
+@admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     """Кастомная админка для Group с упрощённым виджетом прав."""
 
     form = GroupForm
-
-
-admin.site.unregister(Group)
-admin.site.register(Group, GroupAdmin)
 
 
 @admin.action(description="Опубликовать выбранные объекты")
@@ -52,7 +41,7 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = ("created_at",)
     ordering = ("title",)
-    list_per_page = 25
+    list_per_page = ADMIN_LIST_PER_PAGE
     actions = [mark_published, mark_unpublished]
     actions_on_bottom = True
 
@@ -66,7 +55,7 @@ class LocationAdmin(admin.ModelAdmin):
     search_fields = ("name",)
     readonly_fields = ("created_at",)
     ordering = ("name",)
-    list_per_page = 25
+    list_per_page = ADMIN_LIST_PER_PAGE
     actions = [mark_published, mark_unpublished]
     actions_on_bottom = True
 
@@ -91,7 +80,7 @@ class PostAdmin(admin.ModelAdmin):
     list_select_related = ("author", "category", "location")
     autocomplete_fields = ("author", "category", "location")
     save_on_top = True
-    list_per_page = 25
+    list_per_page = ADMIN_LIST_PER_PAGE
     actions = [mark_published, mark_unpublished]
     actions_on_bottom = True
 

@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
-from .models import Post, Category, Location
+
+from .models import Category, Location, Post
 
 
 def index(request):
