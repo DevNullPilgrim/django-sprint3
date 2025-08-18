@@ -1,8 +1,8 @@
+from core.models import PublishedModel
 from django.contrib.auth.models import User
 from django.db import models
-from core.models import PublishedModel
-from .constants import (STR_REPR_MAX_LENGTH,
-                        DEFAULTRELATED_NAME_POSTS)
+
+from .constants import DEFAULTRELATED_NAME_POSTS, STR_REPR_MAX_LENGTH
 
 
 def _short(s: str) -> str:

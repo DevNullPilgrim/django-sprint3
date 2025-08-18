@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Посты по локации: {{ location.name }}</h1>
+
+  {% for post in posts %}
+    <article>
+      <h2><a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a></h2>
+      <p>{{ post.pub_date|date:"d.m.Y H:i" }} — {{ post.author }}</p>
+      {% if post.category %}<p>Категория: {{ post.category.title }}</p>{% endif %}
+    </article>
+  {% empty %}
+    <p>В этой локации пока нет постов.</p>
+  {% endfor %}
+{% endblock %}

@@ -1,9 +1,9 @@
 from django.contrib import admin, messages
 from django.contrib.auth.models import Group
 
+from .constants import ADMIN_LIST_PER_PAGE
 from .forms import GroupForm
 from .models import Category, Location, Post
-from .constants import ADMIN_LIST_PER_PAGE
 
 admin.site.unregister(Group)
 
