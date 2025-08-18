@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from .models import Category, Location, Post
+from .models import Category, Post
 from .constants import LAST_FIVE_POSTS
 
 
@@ -31,7 +31,7 @@ def index(request):
 
 
 def post_detail(request, pk):
-    """Детальная: пост опубликован, не из будущего, категория существует и опубликована."""
+    """Детальная: пост опубликован, категория существует и опубликована."""
     post = get_object_or_404(
         get_posts_queryset()
         .filter(
