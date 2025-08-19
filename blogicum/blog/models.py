@@ -1,10 +1,10 @@
-from .service import _short
 from django.contrib.auth.models import User
 from django.db import models
 
 from core.models import PublishedModel
 
 from .constants import DEF_RELATED_NAME_POSTS, DEF_RELATED_QUERY_NAME_POST
+from .service import _short
 
 
 class Category(PublishedModel):

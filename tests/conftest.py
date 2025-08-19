@@ -1,9 +1,10 @@
 from http import HTTPStatus
 
 import pytest
+from mixer.backend.django import mixer as _mixer
+
 from django.apps import apps
 from django.contrib.auth import get_user_model
-from mixer.backend.django import mixer as _mixer
 
 try:
     from blog.models import Category, Location, Post  # noqa:F401

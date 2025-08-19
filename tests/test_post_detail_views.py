@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 import pytest
+
 from blog.models import Post
 
 pytestmark = [

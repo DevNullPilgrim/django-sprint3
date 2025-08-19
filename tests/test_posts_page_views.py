@@ -1,5 +1,4 @@
 import pytest
-
 from tests.fixtures.fixture_data import N_POSTS_LIMIT, N_TEST_POSTS
 
 pytestmark = [
