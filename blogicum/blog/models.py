@@ -1,14 +1,10 @@
+from .service import _short
 from django.contrib.auth.models import User
 from django.db import models
 
 from core.models import PublishedModel
 
-from .constants import DEFAULTRELATED_NAME_POSTS, STR_REPR_MAX_LENGTH
-
-
-def _short(s: str) -> str:
-    limit = STR_REPR_MAX_LENGTH
-    return s if len(s) <= limit else f'{s[:limit - 1]}…'
+from .constants import DEF_RELATED_NAME_POSTS, DEF_RELATED_QUERY_NAME_POST
 
 
 class Category(PublishedModel):
@@ -33,10 +29,10 @@ class Category(PublishedModel):
         )
     )
 
-    class Meta:
+    class Meta(PublishedModel.Meta):
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
-        default_related_name = DEFAULTRELATED_NAME_POSTS
+        default_related_name = DEF_RELATED_NAME_POSTS
 
     def __str__(self):
         """Возвращает читабельное представление категории."""
@@ -54,10 +50,10 @@ class Location(PublishedModel):
 
     name = models.CharField('Название места', max_length=256)
 
-    class Meta:
+    class Meta(PublishedModel.Meta):
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
-        default_related_name = DEFAULTRELATED_NAME_POSTS
+        default_related_name = DEF_RELATED_NAME_POSTS
 
     def __str__(self):
         return _short(self.name)
@@ -90,7 +86,7 @@ class Post(PublishedModel):
         User,
         on_delete=models.CASCADE,
         verbose_name='Автор публикации',
-        related_name=DEFAULTRELATED_NAME_POSTS,
+        related_name=DEF_RELATED_NAME_POSTS,
 
     )
     location = models.ForeignKey(
@@ -99,6 +95,7 @@ class Post(PublishedModel):
         null=True,
         blank=True,
         verbose_name='Местоположение',
+        related_query_name=DEF_RELATED_QUERY_NAME_POST,
 
     )
     category = models.ForeignKey(
@@ -106,9 +103,10 @@ class Post(PublishedModel):
         on_delete=models.SET_NULL,
         null=True,
         verbose_name='Категория',
+        related_query_name=DEF_RELATED_QUERY_NAME_POST,
     )
 
-    class Meta:
+    class Meta(PublishedModel.Meta):
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
         ordering = ['-pub_date']

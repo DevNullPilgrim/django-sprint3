@@ -13,6 +13,7 @@ def get_posts_queryset():
         .filter(
             is_published=True,
             pub_date__lte=timezone.now(),
+            category__is_published=True,
         )
         .order_by('-pub_date')
     )
@@ -22,9 +23,6 @@ def index(request):
     """Главная: 5 последних постов с валидной и опубликованной категорией."""
     posts = (
         get_posts_queryset()
-        .filter(
-            category__is_published=True,
-        )
         .order_by('-pub_date')[:LAST_FIVE_POSTS]
     )
     return render(request, 'blog/index.html', {'posts': posts})
@@ -33,11 +31,7 @@ def index(request):
 def post_detail(request, pk):
     """Детальная: пост опубликован, категория существует и опубликована."""
     post = get_object_or_404(
-        get_posts_queryset()
-        .filter(
-            category__is_published=True,
-            category__isnull=False
-        ),
+        get_posts_queryset(),
         pk=pk
     )
 
@@ -55,6 +49,5 @@ def category_posts(request, slug):
         category=category).order_by('-pub_date')
     return render(request, 'blog/category.html', {
         'category': category,
-        'posts': posts,
         'post_list': posts,
     })
