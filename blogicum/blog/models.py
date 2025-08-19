@@ -1,10 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from blog.constants import DEF_RELATED_NAME_POSTS
+from blog.service import _short
 from core.models import PublishedModel
-
-from .constants import DEF_RELATED_NAME_POSTS, DEF_RELATED_QUERY_NAME_POST
-from .service import _short
 
 
 class Category(PublishedModel):
@@ -32,7 +31,6 @@ class Category(PublishedModel):
     class Meta(PublishedModel.Meta):
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
-        default_related_name = DEF_RELATED_NAME_POSTS
 
     def __str__(self):
         """Возвращает читабельное представление категории."""
@@ -53,7 +51,6 @@ class Location(PublishedModel):
     class Meta(PublishedModel.Meta):
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
-        default_related_name = DEF_RELATED_NAME_POSTS
 
     def __str__(self):
         return _short(self.name)
@@ -95,7 +92,7 @@ class Post(PublishedModel):
         null=True,
         blank=True,
         verbose_name='Местоположение',
-        related_query_name=DEF_RELATED_QUERY_NAME_POST,
+        related_name=DEF_RELATED_NAME_POSTS,
 
     )
     category = models.ForeignKey(
@@ -103,10 +100,10 @@ class Post(PublishedModel):
         on_delete=models.SET_NULL,
         null=True,
         verbose_name='Категория',
-        related_query_name=DEF_RELATED_QUERY_NAME_POST,
+        related_name=DEF_RELATED_NAME_POSTS,
     )
 
-    class Meta(PublishedModel.Meta):
+    class Meta():
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
         ordering = ['-pub_date']
